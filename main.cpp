@@ -3,18 +3,32 @@
 
 #include <iostream>
 
-int main(void)
+void glfwErrorCallback(int error, const char* description)
 {
-    GLFWwindow* window;
+    std::cout << "Error " << error << ": " << description << std::endl;
+}
+
+int main()
+{
+
+    glfwSetErrorCallback(glfwErrorCallback);
 
     /* Initialize the library */
     if (!glfwInit())
+    {
+        std::cout << "glfwInit failed" << std::endl;
         return -1;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    if (window)
     {
+        std::cout << "glfwCreateWindow failed" << std::endl;
         glfwTerminate();
         return -1;
     }
@@ -28,9 +42,11 @@ int main(void)
         return -1;
     }
 
-    std::cout << "OpenGL " << GLVersion.major << "." << GLVersion.minor << std::endl;
+    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "OpenGL ver: " << glGetString(GL_VERSION) << std::endl;
 
-    glClearColor(0, 1, 0, 1);
+
+    glClearColor(1, 1, 0, 1);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
