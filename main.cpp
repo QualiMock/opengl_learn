@@ -3,9 +3,27 @@
 
 #include <iostream>
 
+int windowSizeX = 640;
+int windowSizeY = 480;
+
 void glfwErrorCallback(int error, const char* description)
 {
     std::cout << "Error " << error << ": " << description << std::endl;
+}
+
+void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+    windowSizeX = width;
+    windowSizeY = height;
+    glViewport(0, 0, windowSizeX, windowSizeY);
+}
+
+void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    if(key = GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 }
 
 int main()
@@ -25,13 +43,16 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (window)
+    GLFWwindow* window = glfwCreateWindow(windowSizeX, windowSizeY, "Hello World", NULL, NULL);
+    if (!window)
     {
         std::cout << "glfwCreateWindow failed" << std::endl;
         glfwTerminate();
         return -1;
     }
+
+    glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
+    glfwSetKeyCallback(window, glfwKeyCallback);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
