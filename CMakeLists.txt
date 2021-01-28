@@ -10,6 +10,8 @@ add_executable(${proj_name}
     src/main.cpp
     src/renderer/shader_program.cpp
     src/renderer/shader_program.h
+    src/resources/ResourceManager.cpp
+    src/resources/ResourceManager.h
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -22,3 +24,9 @@ target_link_libraries(${proj_name} glfw)
 
 add_subdirectory(external/glad)
 target_link_libraries(${proj_name} glad)
+
+set_target_properties(${proj_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+
+add_custom_command(TARGET ${proj_name} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:${proj_name}>/res)

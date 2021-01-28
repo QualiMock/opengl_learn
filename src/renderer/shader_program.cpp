@@ -33,7 +33,7 @@ namespace Renderer
         if(!success)
         {
             GLchar infoLog[1024];
-            glGetShaderInfoLog(m_ID, 1024, nullptr, infoLog);
+            glGetProgramInfoLog(m_ID, 1024, nullptr, infoLog);
             std::cerr << "ERROR_SHADER: link shader error:\n" << infoLog << std::endl;
 
         }

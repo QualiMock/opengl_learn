@@ -16,8 +16,8 @@ namespace Renderer
 
         ShaderProgram() = delete;
         ShaderProgram(ShaderProgram&) = delete;
-        ShaderProgram &operator = (const ShaderProgram&) = delete;
-        ShaderProgram &operator = (ShaderProgram &&shaderProgram) noexcept;
+        ShaderProgram& operator = (const ShaderProgram&) = delete;
+        ShaderProgram& operator = (ShaderProgram&& shaderProgram) noexcept;
         ShaderProgram(ShaderProgram&& shaderProgram) noexcept;
 
     private:
