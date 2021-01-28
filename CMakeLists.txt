@@ -4,7 +4,13 @@ set(proj_name Learning)
 
 project(${proj_name})
 
-add_executable(${proj_name} main.cpp)
+set(CMAKE_CXX_STANDART 17)
+
+add_executable(${proj_name} 
+    src/main.cpp
+    src/renderer/shader_program.cpp
+    src/renderer/shader_program.h
+)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
