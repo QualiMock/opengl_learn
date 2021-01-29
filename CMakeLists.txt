@@ -4,15 +4,18 @@ set(proj_name Learning)
 
 project(${proj_name})
 
-set(CMAKE_CXX_STANDART 17)
-
 add_executable(${proj_name} 
     src/main.cpp
     src/renderer/ShaderProgram.cpp
     src/renderer/ShaderProgram.h
+    src/renderer/Texture2D.cpp
+    src/renderer/Texture2D.h
     src/resources/ResourceManager.cpp
     src/resources/ResourceManager.h
+    src/resources/stb_image.h
 )
+
+target_compile_features(${proj_name} PUBLIC cxx_std_17)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)

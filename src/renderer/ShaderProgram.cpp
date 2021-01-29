@@ -7,7 +7,6 @@ namespace Renderer
 
 	ShaderProgram::ShaderProgram(const std::string &vertexShader, const std::string &fragmentShader)
 	{
-        GLint success;
 
         GLuint vertexShaderID;
         if(!createShader(vertexShader, GL_VERTEX_SHADER, vertexShaderID))
@@ -29,6 +28,7 @@ namespace Renderer
 	    glAttachShader(m_ID, fragmentShaderID);
 	    glLinkProgram(m_ID);
         
+        GLint success;
         glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
         if(!success)
         {
@@ -58,8 +58,8 @@ namespace Renderer
 
     bool ShaderProgram::createShader(const std::string &source, const GLenum shaderType, GLuint &shaderID)
     {
-        const char* code = source.c_str();
         GLint success;
+        const char* code = source.c_str();
 
         shaderID = glCreateShader(shaderType);
         glShaderSource(shaderID, 1, &code, nullptr);

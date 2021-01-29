@@ -41,7 +41,7 @@ void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
     }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     glfwSetErrorCallback(glfwErrorCallback);
 
@@ -88,6 +88,8 @@ int main(int argc, char *argv[])
 	        std::cerr << "Can't create shader program: " << "DefaultShader" << std::endl;
 	        return -1;
 	    }
+
+        resourceManager.loadTexture("DefaultTexture", "res/textures/map_8x8.png");
 
 	    GLuint points_vbo = 0;
 	    glGenBuffers(1, &points_vbo);
