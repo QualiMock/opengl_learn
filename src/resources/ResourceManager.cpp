@@ -1,5 +1,5 @@
 #include "ResourceManager.h"
-#include "../renderer/shader_program.h"
+#include "../renderer/ShaderProgram.h"
 
 #include <iostream>
 #include <fstream>

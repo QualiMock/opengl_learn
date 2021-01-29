@@ -8,8 +8,8 @@ set(CMAKE_CXX_STANDART 17)
 
 add_executable(${proj_name} 
     src/main.cpp
-    src/renderer/shader_program.cpp
-    src/renderer/shader_program.h
+    src/renderer/ShaderProgram.cpp
+    src/renderer/ShaderProgram.h
     src/resources/ResourceManager.cpp
     src/resources/ResourceManager.h
 )

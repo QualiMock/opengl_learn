@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "renderer/shader_program.h"
+#include "renderer/ShaderProgram.h"
 #include "resources/ResourceManager.h"
 
 GLfloat point[] = {
