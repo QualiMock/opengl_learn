@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "renderer/ShaderProgram.h"
+#include "renderer/Texture2D.h"
 #include "resources/ResourceManager.h"
 
 GLfloat point[] = {
@@ -16,6 +17,12 @@ GLfloat colors[] = {
     1.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 1.0f
+};
+
+GLfloat texCoord[] = {
+    0.5f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f
 };
 
 int windowSizeX = 640;
@@ -89,7 +96,7 @@ int main(int argc, char **argv)
 	        return -1;
 	    }
 
-        resourceManager.loadTexture("DefaultTexture", "res/textures/map_8x8.png");
+        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_8x8.png");
 
 	    GLuint points_vbo = 0;
 	    glGenBuffers(1, &points_vbo);
@@ -101,6 +108,11 @@ int main(int argc, char **argv)
 	    glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
 	    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 	
+	    GLuint texCoord_vbo = 0;
+	    glGenBuffers(1, &texCoord_vbo);
+	    glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+	    glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
+
 	    GLuint vao = 0;
 	    glGenVertexArrays(1, &vao);
 	    glBindVertexArray(vao);
@@ -113,13 +125,20 @@ int main(int argc, char **argv)
 	    glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
 	    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	
+	    glEnableVertexAttribArray(2);
+	    glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+	    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+	    pDefaultShaderProgram->use(); 
+	    pDefaultShaderProgram->setInt("tex", 0);
+
 	    while (!glfwWindowShouldClose(window))
 	    {
 	        glClear(GL_COLOR_BUFFER_BIT);
 	
 	        pDefaultShaderProgram->use();
 	        glBindVertexArray(vao);
-	    
+	        tex->bind();
 	        glDrawArrays(GL_TRIANGLES, 0, 3);
 	
 	        glfwSwapBuffers(window);
