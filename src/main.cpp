@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/vec2.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
 
@@ -8,9 +11,9 @@
 #include "resources/ResourceManager.h"
 
 GLfloat point[] = {
-    0.0f,  0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f
+     0.0f,  50.f, 0.0f,
+     50.f, -50.f, 0.0f,
+    -50.f, -50.f, 0.0f
 };
 
 GLfloat colors[] = {
@@ -25,8 +28,7 @@ GLfloat texCoord[] = {
     0.0f, 0.0f
 };
 
-int windowSizeX = 640;
-int windowSizeY = 480;
+glm::ivec2 windowSize(640, 480);
 
 void glfwErrorCallback(int error, const char* description)
 {
@@ -35,14 +37,14 @@ void glfwErrorCallback(int error, const char* description)
 
 void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    windowSizeX = width;
-    windowSizeY = height;
-    glViewport(0, 0, windowSizeX, windowSizeY);
+    windowSize.x = width;
+    windowSize.y = height;
+    glViewport(0, 0, windowSize.x, windowSize.y);
 }
 
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-    if(key = GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
@@ -62,7 +64,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(windowSizeX, windowSizeY, "Hello World", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(windowSize.x, windowSize.y, "Hello World", nullptr, nullptr);
     if (!window)
     {
         std::cout << "glfwCreateWindow failed" << std::endl;
@@ -132,6 +134,16 @@ int main(int argc, char **argv)
 	    pDefaultShaderProgram->use(); 
 	    pDefaultShaderProgram->setInt("tex", 0);
 
+        glm::mat4 modelMatrix_1 = glm::mat4(1.f);
+        modelMatrix_1 = glm::translate(modelMatrix_1, glm::vec3(100.f, 200.f, 0.f));
+
+        glm::mat4 modelMatrix_2 = glm::mat4(1.f);
+        modelMatrix_2 = glm::translate(modelMatrix_2, glm::vec3(590.f, 200.f, 0.f));
+
+        glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(windowSize.x), 0.f, static_cast<float>(windowSize.y), -100.f, 100.f);
+
+        pDefaultShaderProgram->setMatrix4("projectionMat", projectionMatrix);
+
 	    while (!glfwWindowShouldClose(window))
 	    {
 	        glClear(GL_COLOR_BUFFER_BIT);
@@ -139,7 +151,12 @@ int main(int argc, char **argv)
 	        pDefaultShaderProgram->use();
 	        glBindVertexArray(vao);
 	        tex->bind();
+
+            pDefaultShaderProgram->setMatrix4("modelMat", modelMatrix_1);   
 	        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            pDefaultShaderProgram->setMatrix4("modelMat", modelMatrix_2);   
+            glDrawArrays(GL_TRIANGLES, 0, 3);
 	
 	        glfwSwapBuffers(window);
 	

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/mat4x4.hpp>
+
 #include <string>
 
 namespace Renderer
@@ -14,6 +16,7 @@ namespace Renderer
         bool isCompiled() const { return m_isCompiled; }
         void use() const;
         void setInt(const std::string &name, const GLint value);
+        void setMatrix4(const std::string& name, const glm::mat4& matrix);
 
         ShaderProgram() = delete;
         ShaderProgram(ShaderProgram&) = delete;
