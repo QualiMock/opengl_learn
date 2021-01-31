@@ -10,10 +10,12 @@
 #include "renderer/Texture2D.h"
 #include "resources/ResourceManager.h"
 
+glm::ivec2 windowSize(640, 480);
+
 GLfloat point[] = {
      0.0f,  50.f, 0.0f,
-     50.f, -50.f, 0.0f,
-    -50.f, -50.f, 0.0f
+     100.f, -100.f, 0.0f,
+    -100.f, -100.f, 0.0f
 };
 
 GLfloat colors[] = {
@@ -27,8 +29,6 @@ GLfloat texCoord[] = {
     1.0f, 0.0f,
     0.0f, 0.0f
 };
-
-glm::ivec2 windowSize(640, 480);
 
 void glfwErrorCallback(int error, const char* description)
 {
@@ -47,6 +47,43 @@ void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+
+    if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+        GLfloat pointCoord;
+        int choise;
+
+        std::cout << "Choose point(1-3): ";
+        std::cin >> choise;
+
+        switch(choise)
+        {
+        case 1:
+            std::cout << "Set X coord: "; std::cin >> pointCoord;
+            point[0] = pointCoord;
+
+            std::cout << "Set Y coord: "; std::cin >> pointCoord;
+            point[1] = pointCoord;
+            break;
+        case 2:
+            std::cout << "Set X coord: "; std::cin >> pointCoord;
+            point[3] = pointCoord;
+
+            std::cout << "Set Y coord: "; std::cin >> pointCoord;
+            point[4] = pointCoord;
+            break;
+        case 3:
+            std::cout << "Set X coord: "; std::cin >> pointCoord;
+            point[6] = pointCoord;
+
+            std::cout << "Set Y coord: "; std::cin >> pointCoord;
+            point[7] = pointCoord;
+            break;
+        default:
+            std::cout << "Wrong point" << std::endl;
+            break;
+        }
     }
 }
 
@@ -98,7 +135,7 @@ int main(int argc, char **argv)
 	        return -1;
 	    }
 
-        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_8x8.png");
+        //auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_8x8.png");
 
 	    GLuint points_vbo = 0;
 	    glGenBuffers(1, &points_vbo);
@@ -135,10 +172,7 @@ int main(int argc, char **argv)
 	    pDefaultShaderProgram->setInt("tex", 0);
 
         glm::mat4 modelMatrix_1 = glm::mat4(1.f);
-        modelMatrix_1 = glm::translate(modelMatrix_1, glm::vec3(100.f, 200.f, 0.f));
-
-        glm::mat4 modelMatrix_2 = glm::mat4(1.f);
-        modelMatrix_2 = glm::translate(modelMatrix_2, glm::vec3(590.f, 200.f, 0.f));
+        modelMatrix_1 = glm::translate(modelMatrix_1, glm::vec3(static_cast<float>(windowSize.x)/2, static_cast<float>(windowSize.y)/2, 0.f));
 
         glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(windowSize.x), 0.f, static_cast<float>(windowSize.y), -100.f, 100.f);
 
@@ -150,14 +184,11 @@ int main(int argc, char **argv)
 	
 	        pDefaultShaderProgram->use();
 	        glBindVertexArray(vao);
-	        tex->bind();
+	        //tex->bind();
 
             pDefaultShaderProgram->setMatrix4("modelMat", modelMatrix_1);   
 	        glDrawArrays(GL_TRIANGLES, 0, 3);
 
-            pDefaultShaderProgram->setMatrix4("modelMat", modelMatrix_2);   
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-	
 	        glfwSwapBuffers(window);
 	
 	        glfwPollEvents();
